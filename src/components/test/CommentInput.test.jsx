@@ -28,34 +28,22 @@ import CommentInput from '../CommentInput';
 
 describe('CommentInput component', () => {
 
-//   it('should handle comment content typing correctly', async () => {
+  it('should handle comment content typing correctly', async () => {
 
-//     // Arrange
-
-//     render(<CommentInput onAddComment={() => {}} />);
-
-//     const commentInput = screen.getByPlaceholderText('Tulis tanggapanmu...');
-
-//     // Action
-
-//     await userEvent.type(commentInput, 'Ini komentar percobaan');
-
-//     // Assert
-
-//     expect(commentInput).toHaveValue('Ini komentar percobaan');
-
-//   });
-
-it('should handle comment content typing correctly', async () => {
     // Arrange
+
     render(<CommentInput onAddComment={() => {}} />);
+
     const commentInput = screen.getByPlaceholderText('Tulis tanggapanmu...');
 
     // Action
+
     await userEvent.type(commentInput, 'Ini komentar percobaan');
 
-    // Assert (Disengaja ERROR untuk Screenshot 1)
-    expect(commentInput).toHaveValue('Sengaja Dibuat Salah'); 
+    // Assert
+
+    expect(commentInput).toHaveValue('Ini komentar percobaan');
+
   });
 
 
