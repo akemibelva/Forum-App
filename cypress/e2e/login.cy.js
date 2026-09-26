@@ -85,42 +85,46 @@ describe('Login spec', () => {
   });
 
   it('harus berhasil melakukan logout dari aplikasi', () => {
-    // Mock respon API login berhasil
-    cy.intercept('POST', '**/login', {
-      statusCode: 200,
-      body: {
-        status: 'success',
-        data: {
-          token: 'fake-jwt-token-12345',
+  // Mock respon API login berhasil
+  cy.intercept('POST', '**/login', {
+    statusCode: 200,
+    body: {
+      status: 'success',
+      data: {
+        token: 'fake-jwt-token-12345',
+      },
+    },
+  }).as('loginSuccess');
+
+  // Mock respon API profil pengguna me/user
+  cy.intercept('GET', '**/users/me', {
+    statusCode: 200,
+    body: {
+      status: 'success',
+      data: {
+        user: {
+          id: 'user-1',
+          name: 'lala',
+          email: 'velo@gmail.com',
         },
       },
-    }).as('loginSuccess');
+    },
+  }).as('getUserProfile');
 
-    // Mock respon API profil pengguna me/user
-    cy.intercept('GET', '**/users/me', {
-      statusCode: 200,
-      body: {
-        status: 'success',
-        data: {
-          user: {
-            id: 'user-1',
-            name: 'Velo',
-            email: 'velo@gmail.com',
-          },
-        },
-      },
-    }).as('getUserProfile');
+  cy.get('a[href="/login"]').click();
 
-    cy.get('a[href="/login"]').click();
+  cy.get('input[type="email"]').type('velo@gmail.com');
+  cy.get('input[type="password"]').type('velo26');
+  cy.get('button[type="submit"]').click();
 
-    cy.get('input[type="email"]').type('velo@gmail.com');
-    cy.get('input[type="password"]').type('velo26');
-    cy.get('button[type="submit"]').click();
+  // Tunggu hingga API login dan get profile selesai diproses
+  cy.wait('@loginSuccess');
+  cy.wait('@getUserProfile');
 
-    // Klik tombol logout
-    cy.get('.btn-logout', { timeout: 15000 }).click();
+  // Pastikan tombol logout sudah terlihat sebelum diklik
+  cy.get('.btn-logout', { timeout: 10000 }).should('be.visible').click();
 
-    // Memastikan kembali ke halaman utama/login
-    cy.get('a[href="/login"]', { timeout: 15000 }).should('be.visible');
-  });
+  // Pastikan tombol login kembali muncul setelah logout
+  cy.get('a[href="/login"]', { timeout: 10000 }).should('be.visible');
+});
 });
