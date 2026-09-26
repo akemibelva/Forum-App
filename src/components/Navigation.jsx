@@ -60,7 +60,7 @@ function Navigation({ authUser, onLogout }) {
                 className="app-auth__avatar"
               />
               <span className="app-auth__name">{authUser.name}</span>
-              
+
               {/* Menggunakan StyledLogoutButton tetapi tetap mempertahankan class .btn-logout untuk Cypress E2E */}
               <StyledLogoutButton
                 type="button"
