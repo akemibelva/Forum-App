@@ -21,6 +21,10 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
+        ...globals.mocha,     // Menyediakan describe, it, beforeEach, dll.
+        cy: 'readonly',       // Menyediakan cy & Cypress
+        Cypress: 'readonly',
+        expect: 'readonly',   // Menambahkan expect agar error expect is not defined hilang
       },
       parserOptions: {
         ecmaFeatures: {
@@ -40,7 +44,14 @@ export default [
       ...(dicodingStyle.rules || {}),
       'react/prop-types': 'off',
       'no-alert': 'off',
-      'no-unused-vars': ['warn', { varsIgnorePattern: '^React$' }],
+      // Mengabaikan variabel tak terpakai yang diawali karakter underscore (_) atau bernama React/on/config
+      'no-unused-vars': [
+        'warn',
+        {
+          varsIgnorePattern: '^(React|on|config)$',
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ];
