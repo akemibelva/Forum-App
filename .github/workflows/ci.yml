@@ -23,11 +23,11 @@ jobs:
         run: npm ci
 
       - name: Run Unit & Component Tests
-        run: npm test -- --run
+        run: npx vitest run
 
       - name: Run E2E Tests (Cypress)
         uses: cypress-io/github-action@v5
         with:
           build: npm run build
           start: npm run dev
-          wait-on: 'http://localhost:5173' # Sesuaikan port dev server Vite/React milikmu
+          wait-on: 'http://localhost:5173'
