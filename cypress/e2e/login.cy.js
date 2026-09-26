@@ -9,15 +9,28 @@
  */
 
 describe('Login spec', () => {
+  // Buat kredensial unik berdasarkan timestamp agar tidak bentrok di API
+  const randomUser = `user_${Date.now()}`;
+  const testEmail = `${randomUser}@gmail.com`;
+  const testPassword = 'password123';
+  const testName = 'User Test CI';
+
+  before(() => {
+    // Registrasi akun baru secara programmatic/UI sebelum tes berjalan
+    cy.visit('/register');
+    cy.get('input[placeholder="Nama"]').type(testName);
+    cy.get('input[type="email"]').type(testEmail);
+    cy.get('input[type="password"]').type(testPassword);
+    cy.get('button[type="submit"]').click();
+  });
+
   beforeEach(() => {
     cy.visit('/');
   });
 
   it('harus menampilkan halaman login dengan benar', () => {
-    // Navigasi ke halaman login jika belum di halaman login
     cy.get('a[href="/login"]').click();
 
-    // Verifikasi elemen form login
     cy.get('input[type="email"]').should('be.visible');
     cy.get('input[type="password"]').should('be.visible');
     cy.get('button[type="submit"]').should('be.visible');
@@ -26,12 +39,10 @@ describe('Login spec', () => {
   it('harus menampilkan alert jika email atau password salah', () => {
     cy.get('a[href="/login"]').click();
 
-    // Mengisi data login yang salah
-    cy.get('input[type="email"]').type('wrongemail@gmail.com');
+    cy.get('input[type="email"]').type('wrongemail_xyz@gmail.com');
     cy.get('input[type="password"]').type('wrongpassword');
     cy.get('button[type="submit"]').click();
 
-    // Memastikan window.alert dipanggil dengan pesan kesalahan
     cy.on('window:alert', (str) => {
       expect(str).to.be.a('string');
     });
@@ -40,27 +51,25 @@ describe('Login spec', () => {
   it('harus berhasil login dan masuk ke halaman utama ketika kredensial benar', () => {
     cy.get('a[href="/login"]').click();
 
-    // Mengisi data login yang valid (Ganti dengan akun ujimu yang terdaftar di API Dicoding)
-    cy.get('input[type="email"]').type('velo@gmail.com');
-    cy.get('input[type="password"]').type('velo26');
+    // Menggunakan akun yang baru saja dibuat di block before()
+    cy.get('input[type="email"]').type(testEmail);
+    cy.get('input[type="password"]').type(testPassword);
     cy.get('button[type="submit"]').click();
 
-    // Memastikan elemen profil pengguna atau tombol logout muncul di header
-    cy.get('.app-auth__user').should('be.visible');
-    cy.get('.btn-logout').should('be.visible');
+    // Beri timeout 10000ms untuk mengantisipasi koneksi CI yang lambat
+    cy.get('.app-auth__user', { timeout: 10000 }).should('be.visible');
+    cy.get('.btn-logout', { timeout: 10000 }).should('be.visible');
   });
 
   it('harus berhasil melakukan logout dari aplikasi', () => {
-    // Melakukan login terlebih dahulu
     cy.get('a[href="/login"]').click();
-    cy.get('input[type="email"]').type('velo@gmail.com');
-    cy.get('input[type="password"]').type('velo26');
+
+    cy.get('input[type="email"]').type(testEmail);
+    cy.get('input[type="password"]').type(testPassword);
     cy.get('button[type="submit"]').click();
 
-    // Mengklik tombol logout
-    cy.get('.btn-logout').click();
+    cy.get('.btn-logout', { timeout: 10000 }).click();
 
-    // Memastikan tombol login muncul kembali
-    cy.get('a[href="/login"]').should('be.visible');
+    cy.get('a[href="/login"]', { timeout: 10000 }).should('be.visible');
   });
 });
