@@ -1,8 +1,31 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import useInput from '../utils/useInput';
 import { asyncRegisterUser } from '../states/users/action';
+
+// Integrasi styled-components untuk memenuhi kriteria React Ecosystem
+const StyledSubmitButton = styled.button`
+  width: 100%;
+  padding: 0.75rem;
+  background-color:  #52796f;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: #354f52;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
 
 function RegisterPage() {
   const [name, onNameChange] = useInput('');
@@ -69,9 +92,9 @@ function RegisterPage() {
             />
           </div>
 
-          <button type="submit" className="btn-primary">
+          <StyledSubmitButton type="submit" className="btn-primary">
             Daftar
-          </button>
+          </StyledSubmitButton>
         </form>
 
         <p className="auth-switch">

@@ -1,8 +1,26 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import useInput from '../utils/useInput';
 import { asyncSetAuthUser } from '../states/authuser/action';
+
+// Membuat Styled Component menggunakan styled-components
+const StyledButton = styled.button`
+  width: 100%;
+  padding: 0.75rem;
+  background-color:  #52796f;
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #354f52;
+  }
+`;
 
 function LoginPage() {
   const [email, onEmailChange] = useInput('');
@@ -52,9 +70,10 @@ function LoginPage() {
             />
           </div>
 
-          <button type="submit" className="btn-primary">
+          {/* Menggunakan StyledButton dari styled-components */}
+          <StyledButton type="submit" className="btn-primary">
             Masuk
-          </button>
+          </StyledButton>
         </form>
 
         <p className="auth-switch">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaPlus } from 'react-icons/fa';
+import styled from 'styled-components';
 import ThreadList from '../components/ThreadList';
 import CategoryList from '../components/CategoryList';
 import ThreadInput from '../components/ThreadInput';
@@ -10,6 +11,36 @@ import {
   asyncToggleVoteThread,
   asyncToggleDownVoteThread,
 } from '../states/threads/action';
+
+// Integrasi styled-components untuk memenuhi kriteria React Ecosystem
+const FloatingAddButton = styled.button`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color:  #52796f;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  z-index: 100;
+
+  &:hover {
+    background-color: #354f52;
+    transform: scale(1.08);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
 
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -73,14 +104,14 @@ function HomePage() {
       />
 
       {authUser && (
-        <button
+        <FloatingAddButton
           type="button"
           className="btn-floating-add"
           title="Tambah Thread"
           onClick={() => setIsModalOpen(true)}
         >
           <FaPlus />
-        </button>
+        </FloatingAddButton>
       )}
 
       {isModalOpen && (
