@@ -26,3 +26,4 @@ dist-ssr
 # Cypress (Abaikan rekaman video/screenshot hasil run lokal Cypress)
 cypress/videos
 cypress/screenshots
+.vercel
